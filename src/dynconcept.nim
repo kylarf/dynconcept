@@ -2,7 +2,7 @@ import macros
 import sugar
 
 
-template expand(body: untyped): untyped =
+template expand*(body: untyped): untyped =
   body
 
 
@@ -279,7 +279,6 @@ macro dynamic*(defn: untyped): untyped =
   )
   result[0] = genSym(nskType, unwrap_postfix(basename[0]).strval & "DynamicExpansion")
   result[2] = newCall(ident("expand"), template_body)
-  echo result.repr
 
 
 proc syms_to_idents(n: NimNode): NimNode =
