@@ -146,13 +146,7 @@ proc trampoline(p: NimNode, typename: NimNode, is_exported: bool): NimNode =
 
 proc build_trampolines(typename, procs: NimNode): NimNode =
   result = newNimNode(nnkStmtList)
-  let is_exported = case typename.kind:
-    of nnkPostfix:
-      true
-    of nnkIdent:
-      false
-    else:
-      error("Error: expected a nnkPostfix or nnkIdent NimNode.")
+  let is_exported = (typename.kind == nnkPostfix)
   for p in procs:
     result.add trampoline(p, typename, is_exported)
 
@@ -217,7 +211,6 @@ proc asIdent(T: NimNode): NimNode =
   ident($T)
 
 
-# TODO: need to make the converter generic in the dyn concept
 proc build_converter(
   typename: NimNode, concept_name: NimNode, procdefs: NimNode, is_exported: bool
 ): NimNode =
